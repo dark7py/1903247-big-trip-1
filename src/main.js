@@ -9,7 +9,7 @@ import { render, renderPosition, remove } from './render';
 import { MenuItem } from './const';
 
 
-const AUTHORIAZATION = 'Basic sdjfrjdr34fjwkw34';
+const AUTHORIAZATION = 'Basic sdjfrjdr3d4fjwkw34';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
 
@@ -39,7 +39,7 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       remove(statisticsCOmponent);
-      filterPresenter.destroy();
+        filterPresenter.destroy();
       filterPresenter.init();
       tripPresenter.destroy();
       tripPresenter.init();

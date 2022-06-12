@@ -7,7 +7,6 @@ import PointPresenter, { State as PointPresenterViewState } from './Point-presen
 import { SortType, sortPointsByPrice, sortPointsByTime } from '../utils/sort-functions';
 import { FilterType, UpdateType, UserAction } from '../const';
 import PointNewPresenter from './Point-new-presenter';
-//import { generatePoint } from '../mock/point';
 import { filter } from '../utils/filter';
 import LoadingView from '../view/loading-view';
 import { nanoid } from 'nanoid';
@@ -61,10 +60,6 @@ export default class TripPresenter {
 
     return filteredPoints;
   }
-
-  // get destinations() {
-  //   return this.#pointsModel.destinations;
-  // }
 
   init = async () => {
     try {
