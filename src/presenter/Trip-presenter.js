@@ -64,13 +64,13 @@ export default class TripPresenter {
   init = async () => {
     try {
       this.#destinations = await this.#apiService.destinations;
-    } catch(err) {
+    } catch (err) {
       this.#destinations = [];
     }
 
     try {
       this.#offers = await this.#apiService.offers;
-    } catch(err) {
+    } catch (err) {
       this.#offers = [];
     }
 
@@ -99,7 +99,7 @@ export default class TripPresenter {
     render(this.#tripContainer, this.#statisticComponent, renderPosition.BEFOREEND);
   }
 
-  deleteStatistic = () =>{
+  deleteStatistic = () => {
     remove(this.#statisticComponent);
   }
 
@@ -118,7 +118,7 @@ export default class TripPresenter {
     price: 0,
     offers: [],
     destination: {
-      name: '',
+      name: 'Moscow',
       description: '',
       pictures: []
     },
@@ -182,10 +182,6 @@ export default class TripPresenter {
     this.#pointPresenter.forEach((element) => element.resetView());
   }
 
-  #handlePointChange = (updatePoint) => {
-    this.#pointPresenter.get(updatePoint.id).init(updatePoint);
-  }
-
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
@@ -195,21 +191,6 @@ export default class TripPresenter {
     this.#clearBoard();
     this.#renderBoard();
   }
-
-  // #sortPoints = (sortType) => {
-  //   switch (sortType) {
-  //     case SortType.PRICE.text:
-  //       this.#boardPoints.sort(sortPointsByPrice);
-  //       break;
-  //     case SortType.TIME.text:
-  //       this.#boardPoints.sort(sortPointsByTime);
-  //       break;
-  //     default:
-  //       this.#boardPoints = [...this.#sourceBoardPoints];
-  //   }
-
-  //   this.#currentSortType = sortType;
-  // }
 
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#pointListComponent, this.#handleViewAction, this.#handleModeChange, this.#destinations, this.#offers);
@@ -248,7 +229,6 @@ export default class TripPresenter {
 
   #clearBoard = ({ resetRenderedTotalPrice = false, resetSortType = false } = {}) => {
     const totalPointsPrice = 0;
-    //this.points.price.forEach((sum, price) => sum + price);
 
     this.#pointNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.destroy());

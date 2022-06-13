@@ -19,9 +19,8 @@ export default class PointNewPresenter {
     this.#changeData = changeData;
   }
 
-  init = (newPoint, callback, destinations, allOffers) => {
+  init = (newPoint, destinations, allOffers) => {
     this.#newPoint = newPoint;
-    this.#destroyCallback = callback;
 
     if (this.#pointEditComponent !== null) {
       return;

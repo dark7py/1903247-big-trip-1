@@ -152,11 +152,4 @@ export default class PointPresenter {
       point,
     );
   }
-
-  #handleNewPointClick = () => {
-    this.#changeData(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR
-    );
-  }
 }

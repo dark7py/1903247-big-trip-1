@@ -16,13 +16,13 @@ class PointsModels extends AbstractObservable {
     return this.#points;
   }
 
-  // get destinations() {
-  //   return this.#destinations;
-  // }
+  get destinations() {
+    return this.#destinations;
+  }
 
-  // get offers() {
-  //   return this.#offers;
-  // }
+  get offers() {
+    return this.#offers;
+  }
 
   init = async () => {
     try {
