@@ -91,7 +91,7 @@ export default class TripPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#handleModeChange();
-    this.#pointNewPresenter.init(createNewPointData);
+    this.#pointNewPresenter.init(createNewPointData, this.#destinations, this.#offers);
   }
 
   createStatistic = () => {

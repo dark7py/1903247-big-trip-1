@@ -4,12 +4,12 @@ import dayjs from 'dayjs';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 
-const createPointEditOffersTemplate = (offer, isDisabled) => (
+const createPointEditOffersTemplate = (offer, isDisabled, selectedOffers) => (
   `<div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden"  type="checkbox" name="event-offer-luggage" id="${offer.id}" ${isDisabled ? 'disabled' : ''}>
+  <input class="event__offer-checkbox  visually-hidden"  type="checkbox" name="event-offer-luggage" value="${offer.title}" id="${offer.id}" ${isDisabled ? 'disabled' : ''} ${!selectedOffers || !selectedOffers.includes(offer.title) ? '' : 'checked'}>
   <label class="event__offer-label" for="${offer.id}">
-    <span class="event__offer-title">${offer.title}</span>
-    &plus; <span class="event__offer-price">${offer.price}</span>&euro;&nbsp;
+    <span class="event__offer-title" data-title="${offer.title}">${offer.title}</span>
+    &plus; <span class="event__offer-price" data-title="${offer.title}">${offer.price}</span>&euro;&nbsp;
   </label>
 </div>`
 );
@@ -23,19 +23,14 @@ const createDesinationsDataList = (city) => (
 );
 
 const createOfferForm = (data = {}, destinations, allOffers) => {
-  const { pointType = 'taxi', destination, price = 0, offers, startEventDate, endEventDate, id, isDisabled, isSaving, isDeleting } = data;
+  const { pointType = 'taxi', destination, price = 0, offers, startEventDate, endEventDate, id, isDisabled, isSaving, isDeleting, selectedOffers } = data;
 
   let offersList = '';
   let pictureList = '';
   let dataList = '';
 
-  // offers.forEach((offer) => {
-  //   const offerCurrent = createPointEditOffersTemplate(offer, isDisabled);
-  //   offersList += offerCurrent;
-  // });
-
   allOffers.find((item) => item.type === pointType).offers.forEach((offer) => {
-    const offerCurrent = createPointEditOffersTemplate(offer, isDisabled);
+    const offerCurrent = createPointEditOffersTemplate(offer, isDisabled, selectedOffers);
     offersList += offerCurrent;
   });
 
@@ -46,12 +41,6 @@ const createOfferForm = (data = {}, destinations, allOffers) => {
 
   destinations.forEach((elem) => {
     dataList += createDesinationsDataList(elem.name);
-    // if (elem.name === destination) {
-    //   destinations[index].pictures.forEach((picture) => {
-    //     const pictureCurrent = createDestinationPicturesTemplate(picture);
-    //     pictureList += pictureCurrent;
-    //   });
-    // }
   });
 
   return `<li class="trip-events__item">
@@ -154,12 +143,12 @@ const createOfferForm = (data = {}, destinations, allOffers) => {
         </header>
         <section class="event__details">
 
-          ${offers.length !== 0 ? `<section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+          <section class="event__section  event__section--offers">
+          ${offers.length !== 0 ? '<h3 class="event__section-title  event__section-title--offers">Offers</h3>' : ''}
             <div class="event__available-offers">
               ${offersList}
             </div>
-          </section>` : ''}
+          </section>
 
           ${destination.name !== '' ? `<section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -185,7 +174,7 @@ export default class OfferFormView extends SmartView {
 
   constructor(point, destinations, allOffers) {
     super();
-    this._data = { ...point};
+    this._data = { ...point };
     this.#destinations = destinations;
     this.#allOffers = allOffers;
     this.#setInnerHandlers();
@@ -230,9 +219,8 @@ export default class OfferFormView extends SmartView {
     evt.preventDefault();
     const newDescription = this.#destinations.find((item) => item.name === evt.target.value).description;
     const newPictures = this.#destinations.find((item) => item.name === evt.target.value).pictures;
-    this.updateData({
-      destination: {name: evt.target.value, description: newDescription, pictures: newPictures}
-    });
+
+    this._data.destination = { name: evt.target.value, description: newDescription, pictures: newPictures };
   }
 
   #pointTypeHandler = (evt) => {
@@ -299,20 +287,10 @@ export default class OfferFormView extends SmartView {
     this._data.isDeleting = false;
     const priceValue = this.element.querySelector('.event__input--price').value;
     this._data.price = Number(priceValue);
-    //this._data.destination.name =
 
-    // const offersTemplate = document.querySelectorAll('.event__offer-selector');
-    // console.log(offersTemplate.entries());
-    // const filteredOffersCheked = Array.from(offersTemplate).filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value.split('-').join(' '));
-    // console.log(filteredOffersCheked);
-
-    // const filteredOffersData = Array.from(this._data.offers)
-    //   .filter((offer) =>
-    //     filteredOffersCheked
-    //       .some((filteredOfferCheked) => filteredOfferCheked === offer.title.toLowerCase()));
-    // this._data.selectedOffers = filteredOffersData;
-    // console.log(filteredOffersData);
-
+    const offersTemplate = document.querySelectorAll('.event__offer-checkbox');
+    const filteredOffersCheked = Array.from(offersTemplate).filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value.split('-').join(' '));
+    this._data.selectedOffers = filteredOffersCheked;
 
     this._callback.formSubmit(this._data);
   }

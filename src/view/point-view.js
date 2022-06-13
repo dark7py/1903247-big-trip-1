@@ -2,12 +2,26 @@ import dayjs from 'dayjs';
 import AbstractView from './abstract-view.js';
 import { formatTimeInMinute } from '../utils/time-function.js';
 
+const createOffersList = (offer) => (
+  `<li class="event__offer">
+    <span class="event__offer-title">${offer}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">50</span>
+  </li>`
+);
 
 const createPointTemplate = (point) => {
-  const { pointType, price, destination, isFavorite, startEventDate, endEventDate } = point;
+  const { pointType, price, destination, isFavorite, startEventDate, endEventDate, selectedOffers } = point;
 
   const timeBetweenDateInMin = dayjs(endEventDate).diff(startEventDate, 'minute');
   const formatPeriod = formatTimeInMinute(timeBetweenDateInMin);
+
+  let selectOffersList = '';
+  if (selectedOffers) {
+    selectedOffers.forEach((offer) => {
+      selectOffersList += createOffersList(offer);
+    });
+  }
 
   const favoriteClassName = isFavorite
     ? 'event__favorite-btn event__favorite-btn--active'
@@ -33,7 +47,7 @@ const createPointTemplate = (point) => {
           </p>
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers">
-
+            ${selectOffersList}
           </ul>
           <button class="${favoriteClassName}" type="button">
             <span class="visually-hidden">Add to favorite</span>
